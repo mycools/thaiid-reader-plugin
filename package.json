@@ -17,7 +17,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/atiwat061013/thaiid-reader-plugin.git"
+    "url": "https://github.com/atiwat061013/thaiid-reader-plugin.git"
   },
   "bugs": {
     "url": "https://github.com/atiwat061013/thaiid-reader-plugin/issues"
@@ -25,7 +25,12 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "smartcard",
+    "personal-id-card",
+    "thai-personal-id",
+    "thai-national-id",
+    "thai-reader"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
