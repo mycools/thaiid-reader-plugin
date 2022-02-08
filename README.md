@@ -13,22 +13,54 @@ npx cap sync
 
 <docgen-index>
 
-* [`reader(...)`](#reader)
+* [`reader()`](#reader)
+* [`findReader()`](#findreader)
+* [`getNameReader()`](#getnamereader)
+* [`powerOn()`](#poweron)
 
 </docgen-index>
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### reader(...)
+### reader()
 
 ```typescript
-reader(options: { value: string; }) => Promise<{ value: string; }>
+reader() => Promise<{ value: string; }>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
+**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+
+--------------------
+
+
+### findReader()
+
+```typescript
+findReader() => Promise<{ value: string; }>
+```
+
+**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+
+--------------------
+
+
+### getNameReader()
+
+```typescript
+getNameReader() => Promise<{ value: string; }>
+```
+
+**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+
+--------------------
+
+
+### powerOn()
+
+```typescript
+powerOn() => Promise<{ value: string; }>
+```
 
 **Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
 

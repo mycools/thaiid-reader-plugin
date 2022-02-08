@@ -1,3 +1,6 @@
 export interface ThaiIDReaderPlugin {
-  reader(options: { value: string }): Promise<{ value: string }>;
+  reader(): Promise<{ value: string }>;
+  findReader(): Promise<{ value: string }>;
+  getNameReader(): Promise<{ value: string }>;
+  powerOn(): Promise<{ value: string }>;
 }
