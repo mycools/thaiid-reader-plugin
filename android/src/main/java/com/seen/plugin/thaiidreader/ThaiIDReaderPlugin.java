@@ -31,8 +31,9 @@ public class ThaiIDReaderPlugin extends Plugin {
                         ThaiSmartCard.PersonalInformation info = thaiSmartCard.getPersonalInformation();
 
                         if (info == null) {
-                            Toast.makeText(getActivity().getApplicationContext(), "Read Smart Card information failed", Toast.LENGTH_LONG)
-                                    .show();
+                            call.errorCallback("Read Smart Card information failed");
+//                            Toast.makeText(getActivity().getApplicationContext(), "Read Smart Card information failed", Toast.LENGTH_LONG)
+//                                    .show();
                             return;
                         }
 
@@ -41,9 +42,10 @@ public class ThaiIDReaderPlugin extends Plugin {
                         String personalPic = thaiSmartCard.getPersonalPicture();
                         Log.d("personalPic", personalPic);
                         if (personalPic == null) {
-                            Toast
-                                    .makeText(getActivity().getApplicationContext(), "Read Smart Card personal picture failed", Toast.LENGTH_LONG)
-                                    .show();
+                            call.errorCallback("Read Smart Card personal picture failed");
+//                            Toast
+//                                    .makeText(getActivity().getApplicationContext(), "Read Smart Card personal picture failed", Toast.LENGTH_LONG)
+//                                    .show();
                             return;
                         }
 
@@ -91,13 +93,15 @@ public class ThaiIDReaderPlugin extends Plugin {
 
                     @Override
                     public void OnDetached(SmartCardDevice device) {
-                        Toast.makeText(getActivity().getApplicationContext(), "Smart Card is removed", Toast.LENGTH_LONG).show();
+                        call.errorCallback("Smart Card is removed");
+//                        Toast.makeText(getActivity().getApplicationContext(), "Smart Card is removed", Toast.LENGTH_LONG).show();
                     }
                 }
         );
 
         if (device == null) {
-            Toast.makeText(getActivity().getApplicationContext(), "Smart Card device not found", Toast.LENGTH_LONG).show();
+            call.errorCallback("Smart Card device not found");
+//            Toast.makeText(getActivity().getApplicationContext(), "Smart Card device not found", Toast.LENGTH_LONG).show();
         }
     }
 }
