@@ -28,9 +28,8 @@ import java.util.ArrayList;
 public class ThaiIDReaderPlugin extends Plugin {
     FTReader mFtReader;
     String ReaderName;
-    private String[] readerNames;
-    int type = 0;//usb
     int slotIndex = 0;
+    String mHandlerMessage;
     private ThaiIDReader implementation = new ThaiIDReader();
 
     @PluginMethod
@@ -42,6 +41,7 @@ public class ThaiIDReaderPlugin extends Plugin {
                 JSObject find = new JSObject();
                 find.put("status", implementation.findReader("success"));
                 find.put("message", implementation.findReader("USB device connection Success."));
+                find.put("mHandlerMessage", implementation.findReader(mHandlerMessage));
                 call.resolve(find);
 //                Toast.makeText(getActivity().getApplicationContext(), "success", Toast.LENGTH_LONG).show();
                 //open in handler case usb_in.
@@ -50,6 +50,7 @@ public class ThaiIDReaderPlugin extends Plugin {
                 JSObject find = new JSObject();
                 find.put("status", implementation.findReader("failed"));
                 find.put("message", implementation.findReader("USB device connection Failed."));
+                find.put("mHandlerMessage", implementation.findReader(mHandlerMessage));
                 call.resolve(find);
 //                Toast.makeText(getActivity().getApplicationContext(), "connection failed.", Toast.LENGTH_LONG).show();
             }
@@ -97,8 +98,6 @@ public class ThaiIDReaderPlugin extends Plugin {
 
     @PluginMethod
     public void reader(PluginCall call) {
-        mFtReader = new FTReader(getActivity().getApplicationContext(), mHandler, DK.FTREADER_TYPE_USB);
-        String value = call.getString("value");
         SmartCardDevice device = SmartCardDevice.getSmartCardDevice(
                 getActivity().getApplicationContext(),
                 ReaderName,
@@ -140,29 +139,29 @@ public class ThaiIDReaderPlugin extends Plugin {
 
                         JSObject ret = new JSObject();
                         ret.put("version", implementation.reader(info.Version));
-                        ret.put("personalID", implementation.reader(info.PersonalID));
-                        ret.put("nameTH", implementation.reader(info.NameTH));
-                        ret.put("nameEN", implementation.reader(info.NameEN));
-                        ret.put("birthDate", implementation.reader(info.BirthDate));
+                        ret.put("id_number", implementation.reader(info.PersonalID));
+                        ret.put("th_name", implementation.reader(info.NameTH));
+                        ret.put("en_name", implementation.reader(info.NameEN));
+                        ret.put("dob", implementation.reader(info.BirthDate));
                         ret.put("gender", implementation.reader(info.Gender));
-                        ret.put("requestNo", implementation.reader(info.RequestNo));
+                        ret.put("request_no", implementation.reader(info.RequestNo));
                         ret.put("issuer", implementation.reader(info.Issuer));
-                        ret.put("issuerCode", implementation.reader(info.IssuerCode));
-                        ret.put("issueDate", implementation.reader(info.IssueDate));
-                        ret.put("expireDate", implementation.reader(info.ExpireDate));
-                        ret.put("typeCard", implementation.reader(info.TypeCard));
+                        ret.put("issuer_code", implementation.reader(info.IssuerCode));
+                        ret.put("issue_date", implementation.reader(info.IssueDate));
+                        ret.put("expire_date", implementation.reader(info.ExpireDate));
+                        ret.put("type_card", implementation.reader(info.TypeCard));
 
-                        ret.put("address_HouseNo", implementation.reader(address.get(0)));
-                        ret.put("address_MooNo", implementation.reader(address.get(1)));
-                        ret.put("address_Alley", implementation.reader(address.get(2)));
-                        ret.put("address_Lane", implementation.reader(address.get(3)));
-                        ret.put("address_Road", implementation.reader(address.get(4)));
-                        ret.put("address_SubDistrict", implementation.reader(address.get(5)));
-                        ret.put("address_District", implementation.reader(address.get(6)));
-                        ret.put("address_Province", implementation.reader(address.get(7)));
+                        ret.put("address_number", implementation.reader(address.get(0)));
+                        ret.put("address_village_no", implementation.reader(address.get(1)));
+                        ret.put("address_alley", implementation.reader(address.get(2)));
+                        ret.put("address_lane", implementation.reader(address.get(3)));
+                        ret.put("address_road", implementation.reader(address.get(4)));
+                        ret.put("address_sub_district", implementation.reader(address.get(5)));
+                        ret.put("address_district", implementation.reader(address.get(6)));
+                        ret.put("address_province", implementation.reader(address.get(7)));
 
-                        ret.put("pictureTag", implementation.reader(info.PictureTag));
-                        ret.put("personalPic", implementation.reader(personalPic));
+                        ret.put("pic_tag_no", implementation.reader(info.PictureTag));
+                        ret.put("pic_face", implementation.reader(personalPic));
 
 
                         call.resolve(ret);
@@ -179,6 +178,20 @@ public class ThaiIDReaderPlugin extends Plugin {
         if (device == null) {
             call.errorCallback("Smart Card device not found");
 //            Toast.makeText(getActivity().getApplicationContext(), "Smart Card device not found", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    //Close device.
+    @PluginMethod
+    public void close(PluginCall call) {
+        try {
+            mFtReader.readerClose();
+            JSObject ret = new JSObject();
+            ret.put("status", implementation.close("success"));
+            ret.put("message", implementation.close("USB device has been disconnected."));
+            call.resolve(ret);
+        }catch (FTException e) {
+            e.printStackTrace();
         }
     }
 
@@ -214,23 +227,18 @@ public class ThaiIDReaderPlugin extends Plugin {
 //                            if (names.length != 0) {
 //                                addSpinnerPrivate(names);
 //                            }
-                            readerNames = names;
                             if (names != null) {
                                 try {
-                                    Log.d("ReaderUSB", "readerNames: " + names);
                                     mFtReader.readerOpen(names);
                                 } catch (FTException e) {
                                     e.printStackTrace();
                                 }
                             }
-                            Log.d("ReaderUSB", "readerNames: " + readerNames);
-
-//                            poweron();
-//                            getReaderName();
-                            Log.d("ReaderUSB", "readerNames: " + ReaderName);
+                            mHandlerMessage = "USB device has been connected.";
 //                            Toast.makeText(getActivity().getApplicationContext(), "USB device has been connected.", Toast.LENGTH_SHORT).show();
                         } catch (FTException e) {
                             e.printStackTrace();
+                            mHandlerMessage = "USB device connection failed.";
 //                            Toast.makeText(MainActivity.this, "USB device connection failed.", Toast.LENGTH_SHORT).show();
 
 
@@ -244,19 +252,23 @@ public class ThaiIDReaderPlugin extends Plugin {
 //                    Toast.makeText(MainActivity.this, "BLE device has been disconnected.", Toast.LENGTH_SHORT).show();
                     break;
                 case DK.USB_IN:
+                    mHandlerMessage = "USB device has been inserted.";
 //                    Toast.makeText(MainActivity.this, "USB device has been inserted.", Toast.LENGTH_SHORT).show();
                     break;
                 case DK.USB_OUT:
+                    mHandlerMessage = "USB device out";
 //                    Toast.makeText(MainActivity.this, "USB device out", Toast.LENGTH_SHORT).show();
 //                    addSpinnerPrivate(new String[]{});
                     break;
                 default:
                     if ((msg.what & DK.CARD_IN_MASK) == DK.CARD_IN_MASK) {
                         //Card in.
+                        mHandlerMessage = "Card slot " + (msg.what % DK.CARD_IN_MASK) + " in.";
 //                        Toast.makeText(MainActivity.this, "Card slot " + (msg.what % DK.CARD_IN_MASK) + " in.", Toast.LENGTH_SHORT).show();
                         return;
                     } else if ((msg.what & DK.CARD_OUT_MASK) == DK.CARD_OUT_MASK) {
                         //Card out.
+                        mHandlerMessage = "Card slot " + (msg.what % DK.CARD_IN_MASK) + " out.";
 //                        Toast.makeText(MainActivity.this, "Card slot " + (msg.what % DK.CARD_IN_MASK) + " out.", Toast.LENGTH_SHORT).show();
                         return;
                     }

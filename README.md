@@ -17,6 +17,7 @@ npx cap sync
 * [`findReader()`](#findreader)
 * [`getNameReader()`](#getnamereader)
 * [`powerOn()`](#poweron)
+* [`close()`](#close)
 
 </docgen-index>
 
@@ -60,6 +61,17 @@ getNameReader() => Promise<{ value: string; }>
 
 ```typescript
 powerOn() => Promise<{ value: string; }>
+```
+
+**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+
+--------------------
+
+
+### close()
+
+```typescript
+close() => Promise<{ value: string; }>
 ```
 
 **Returns:** <code>Promise&lt;{ value: string; }&gt;</code>

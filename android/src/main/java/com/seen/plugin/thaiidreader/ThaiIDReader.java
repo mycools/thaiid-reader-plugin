@@ -16,4 +16,7 @@ public class ThaiIDReader {
     public String reader(String value) {
         return value ;
     }
+    public String close(String value) {
+        return value ;
+    }
 }

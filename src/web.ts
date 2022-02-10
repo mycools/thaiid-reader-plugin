@@ -13,4 +13,7 @@ export class ThaiIDReaderWeb extends WebPlugin implements ThaiIDReaderPlugin {
   async powerOn():  Promise<{ value: string }> {
     throw this.unimplemented('powerOn() Not implemented on web.');
   }
+  async close():  Promise<{ value: string }> {
+    throw this.unimplemented('close() Not implemented on web.');
+  }
 }
